@@ -1,6 +1,4 @@
 
-
-```markdown
 # Bike Rental Data Analysis
 
 This repository contains scripts for analyzing bike rental data. The analysis covers various aspects of the dataset including exploratory data analysis, visualization, and model comparison. The dataset is sourced from Kaggle, detailing bike rentals in Washington D.C. for the years 2011 and 2012.
@@ -10,10 +8,12 @@ This repository contains scripts for analyzing bike rental data. The analysis co
 2. [Data Source](#data-source)
 3. [Installation](#installation)
 4. [Data Preparation](#data-preparation)
-5. [Exploratory Data Analysis](#exploratory-data-analysis)
-6. [Visualizations](#visualizations)
-7. [Model Comparison](#model-comparison)
-8. [Conclusion](#conclusion)
+5. [Attribute Information](#attribute-information)
+6. [Exploratory Data Analysis](#exploratory-data-analysis)
+7. [Visualizations](#visualizations)
+8. [Model Comparison](#model-comparison)
+9. [Conclusion](#conclusion)
+10. [License](#license)
 
 ## Introduction
 
@@ -56,6 +56,29 @@ bike_rental <- read_excel("~/day.xlsx")
 bike_rental$dteday <- as.Date(bike_rental$dteday, format = "%d/%m/%Y")
 ```
 
+## Attribute Information
+
+- **instant**: Record index
+- **dteday**: Date
+- **season**: Season (1: spring, 2: summer, 3: fall, 4: winter)
+- **yr**: Year (0: 2011, 1: 2012)
+- **mnth**: Month (1 to 12)
+- **holiday**: Whether the day is a holiday or not (extracted from http://dchr.dc.gov/page/holiday-schedule)
+- **weekday**: Day of the week
+- **workingday**: If the day is neither weekend nor holiday is 1, otherwise is 0
+- **weathersit**: Weather situation:
+  - 1: Clear, Few clouds, Partly cloudy, Partly cloudy
+  - 2: Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist
+  - 3: Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds
+  - 4: Heavy Rain + Ice Pellets + Thunderstorm + Mist, Snow + Fog
+- **temp**: Normalized temperature in Celsius. The values are divided to 41 (max)
+- **atemp**: Normalized feeling temperature in Celsius. The values are divided to 50 (max)
+- **hum**: Normalized humidity. The values are divided to 100 (max)
+- **windspeed**: Normalized wind speed. The values are divided to 67 (max)
+- **casual**: Count of casual users
+- **registered**: Count of registered users
+- **cnt**: Count of total rental bikes (casual + registered)
+
 ## Exploratory Data Analysis
 
 Perform initial exploration of the dataset:
@@ -64,6 +87,8 @@ Perform initial exploration of the dataset:
 str(bike_rental)
 summary(bike_rental)
 ```
+
+
 
 ## Visualizations
 
