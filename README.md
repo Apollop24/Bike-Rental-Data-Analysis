@@ -1,4 +1,43 @@
-# Load libraries
+
+
+```markdown
+# Bike Rental Data Analysis
+
+This repository contains scripts for analyzing bike rental data. The analysis covers various aspects of the dataset including exploratory data analysis, visualization, and model comparison. The dataset is sourced from Kaggle, detailing bike rentals in Washington D.C. for the years 2011 and 2012.
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Data Source](#data-source)
+3. [Installation](#installation)
+4. [Data Preparation](#data-preparation)
+5. [Exploratory Data Analysis](#exploratory-data-analysis)
+6. [Visualizations](#visualizations)
+7. [Model Comparison](#model-comparison)
+8. [Conclusion](#conclusion)
+
+## Introduction
+
+Bike-sharing systems are modern automated systems for renting bicycles. These systems facilitate easy bike rentals and returns, offering a convenient transportation option. The data in this project is aggregated from daily logs and includes various environmental and seasonal factors affecting bike rentals.
+
+## Data Source
+
+The dataset is obtained from [Kaggle](https://www.kaggle.com/datasets/archit9406/bike-sharing) and contains bike-sharing counts aggregated on a daily basis. The dataset includes two years of data (2011 and 2012) from the Capital Bikeshare system in Washington D.C., USA.
+
+**Citation:**
+Fanaee-T, Hadi, and Gama, Joao, "Event labeling combining ensemble detectors and background knowledge", Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg, doi:10.1007/s13748-013-0040-3.
+
+## Installation
+
+Ensure you have the following R packages installed:
+```r
+install.packages(c("tidyverse", "lubridate", "TTR", "forecast", "readxl", "dplyr", "ggplot2", "plotly", "apaTables", "devtools"))
+devtools::install_github("crsh/papaja")
+```
+
+## Data Preparation
+
+Load the required libraries and read the data from the Excel file:
+```r
 library(tidyverse)
 library(lubridate)
 library(TTR)
@@ -8,8 +47,6 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(apaTables)
-install.packages("devtools")  # Install devtools package
-devtools::install_github("crsh/papaja")  # Install papaja package
 library(papaja)
 
 # Read data
@@ -17,22 +54,35 @@ bike_rental <- read_excel("~/day.xlsx")
 
 # Convert date column to a date format
 bike_rental$dteday <- as.Date(bike_rental$dteday, format = "%d/%m/%Y")
+```
 
-# Perform exploratory data analysis
+## Exploratory Data Analysis
+
+Perform initial exploration of the dataset:
+```r
+# Display structure and summary of the data
 str(bike_rental)
 summary(bike_rental)
+```
 
+## Visualizations
 
-# Distribution of Total Number of Bike Rentals
+### Distribution of Total Number of Bike Rentals
 
-# Histogram of count variable
+Histogram showing the distribution of total bike rentals:
+```r
 ggplot(bike_rental, aes(x=cnt)) +
   geom_histogram(binwidth = 100, fill="dodgerblue4", color="white") +
   xlab("Count of Total Rental Bikes") +
   ylab("Frequency") +
   ggtitle("Distribution of Total Number of Bike Rentals ") +
   theme(plot.title = element_text(family = "Times New Roman", size = 12))
-# Distribution of Total Number of Bike Rentals by Season
+```
+
+### Distribution by Season
+
+Histogram showing bike rentals by season:
+```r
 ggplot(bike_rental, aes(x = cnt, fill = factor(season))) +
   geom_histogram(binwidth = 100, color = "#e9ecef", alpha = 0.8, position = "identity") +
   facet_wrap(~ season, ncol = 2) +
@@ -41,14 +91,14 @@ ggplot(bike_rental, aes(x = cnt, fill = factor(season))) +
        x = "Total Number of Bike Rentals",
        y = "Count") +
   theme(text = element_text(family = "Times New Roman", size = 12))
+```
 
+### Count of Bike Rentals by Weekday and Working Day
 
-#Count of Bike Rentals by Weekday and Working Day
-# Set font to Times New Roman
+Boxplot showing bike rentals by weekday and working day:
+```r
 theme_set(theme_bw(base_family = "Times New Roman"))
 
-
-# Create plot
 p <- ggplot(bike_rental, aes(x = factor(weekday), y = cnt, fill = factor(workingday))) +
   geom_boxplot() +
   scale_fill_discrete(name = "Working Day",
@@ -92,9 +142,12 @@ p <- p %>%
 
 # Show plot
 p
+```
 
-# Visualize count of bike rentals by temperature, humidity, and wind speed
+### Count of Bike Rentals by Temperature, Humidity, and Wind Speed
 
+Scatter plots with regression lines:
+```r
 p1 <- bike_rental %>%
   ggplot(aes(x = temp, y = cnt)) +
   geom_point(aes(color = hum)) +
@@ -128,13 +181,12 @@ ggplotly(p2) %>%
          yaxis = list(title = list(text = "Count of Bike Rentals", font = list(family = "Times New Roman"))),
          legend = list(title = list(text = "Humidity", font = list(family = "Times New Roman"))),
          font = list(family = "Times New Roman"))
+```
 
+### Count of Bike Rentals over Time
 
-
-
-## Visualize count of bike rentals over time
-
-
+Line plot showing bike rentals over time:
+```r
 bike_rental %>%
   mutate(dteday = as.Date(dteday)) %>%
   ggplot(aes(x = dteday, y = cnt)) +
@@ -156,14 +208,18 @@ bike_rental %>%
                              title.position = "top")) +
   scale_color_gradient(low = "#9BC4E2", high = "#F3A712") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  theme(plot.margin = unit(c(1,1,1,1), "cm"))
+  theme(plot.margin = unit(c(1,1,1,1), "cm
+
+"))
 
 ggplotly()
+```
 
+## Model Comparison
 
-# Compare linear regression models against multiple time series models
+### Linear Regression Model
 
-## Simple linear regression model
+```r
 library(stargazer)
 
 stargazer(lm_model, 
@@ -175,26 +231,22 @@ stargazer(lm_model,
           dep.var.labels.include = FALSE,
           column.labels = c("Intercept", "Temperature", "Humidity", "Wind Speed"),
           out = "lm_table.txt")
+```
 
+### Time Series Models
 
-
-
-## Multiple time series models
-
-### Seasonal decomposition of time series
-
+#### Seasonal Decomposition
+```r
 bike_rental_ts <- bike_rental %>%
   select(dteday, cnt) %>%
   mutate(dteday = ymd(dteday)) %>%
   as.ts(index = dteday, frequency = 1)
 
 plot(bike_rental_ts, main = "Count of Bike Rentals over Time")
+```
 
-
-### Autoregressive integrated moving average (ARIMA) model
-
-
-# Convert to time series object
+#### ARIMA Model
+```r
 bike_rental_ts <- bike_rental %>%
   select(dteday, cnt) %>%
   mutate(dteday = ymd(dteday)) %>%
@@ -204,13 +256,29 @@ bike_rental_ts <- bike_rental %>%
 # Fit ARIMA model
 arima_model <- auto.arima(bike_rental_ts, seasonal = TRUE)
 summary(arima_model)
+```
 
-
-
-
-
-### Exponential smoothing state space model with Box-Cox transformation and ARMA errors (ETS)
+#### Exponential smoothing state space model with Box-Cox transformation and ARMA errors (ETS)
+```r
 ets_model <- ets(bike_rental_ts, model = "ZZZ")
 summary(ets_model)
+```
+
+## Conclusion
+
+This project provides a comprehensive analysis of bike rental data, including visualizations and model comparisons. The results offer insights into the patterns and factors influencing bike rentals in Washington D.C.
+
+## License
+
+Use of this dataset in publications must be cited as follows:
+
+Fanaee-T, Hadi, and Gama, Joao, "Event labeling combining ensemble detectors and background knowledge", Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg, doi:10.1007/s13748-013-0040-3.
+```
+
+Feel free to adjust the file paths, installation commands, or any other details as necessary for your specific environment and setup.
+
+
+
+
 
 
