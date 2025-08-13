@@ -2,6 +2,7 @@
 # Bike Rental Data Analysis
 
 This repository contains scripts for analyzing bike rental data. The analysis covers various aspects of the dataset including exploratory data analysis, visualization, and model comparison. The dataset is sourced from Kaggle, detailing bike rentals in Washington D.C. for the years 2011 and 2012.
+<img width="1422" height="683" alt="image" src="https://github.com/user-attachments/assets/04039f2f-ede1-4dd4-9425-35347d5762f0" />
 
 ## Table of Contents
 1. [Introduction](#introduction)
